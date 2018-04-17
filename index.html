@@ -1,7 +1,9 @@
 <html>
   <head>
-    <title>Notebook</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Markdown Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.0/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -9,70 +11,122 @@
     <script src="https://unpkg.com/marked"></script>
     <script src="https://unpkg.com/moment"></script>
 
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <div class="navbar-item">
+          <h1>📗 Markdown Notebook</h1>
+        </div>
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+    </nav>
+
     <div id="notebook">
+      <div class="columns is-mobile">
 
-      <aside class="side-bar">
-        <div class="toolbar">
-          <button @click="addNote" :title="addButtonTitle">
-            <i class="material-icons">add</i> Add note
-          </button>
+        <div class="column is-one-fifth is-text-centered">
+          <br />
+            <a class="button is-primary" @click="addNote" >
+              <span class="icon">
+                <i class="fas fa-plus"></i>
+              </span>
+              <span>Add Note</span>
+            </a>
+            <br />
+            <br />
+
+            <div class="note"
+                  v-for="note in sortedNotes"
+                  @click="selectNote(note)"
+                  :class="{ selected: note === selectedNote }">
+              {{ note.title }}
+              <span class="icon" v-if="note.favorite">
+                <i class="fas fa-star"></i>
+              </span>
+            </div>
+
         </div>
 
-        <div class="notes">
-          <div class="note"
-                v-for="note in sortedNotes"
-                @click="selectNote(note)"
-                :class="{ selected: note === selectedNote }">
-            {{ note.title }}
-            <i class="icon material-icons" v-if="note.favorite">star</i>
+        <template v-if="selectedNote">
+          <div class="column">
+            <div class="columns">
+              <div class="column main-column">
+                <div class="toolbar">
+                  <div class="spacing">
+                    <input v-model="selectedNote.title" placeholder="Note title" />
+
+                    <a class="button is-danger is-outlined" @click="removeNote">
+                      <span>Remove Note</span>
+                      <span class="icon is-small">
+                        <i class="fas fa-trash-alt"></i>
+                      </span>
+                    </a>
+
+                    <a class="button is-warning is-outlined" @click="favoriteNote" >
+                      <template v-if="selectedNote.favorite">
+                        <span class="icon">
+                          <i class="fas fa-star"></i>
+                        </span>
+                      </template>
+
+                      <template v-else>
+                        <span class="icon">
+                          <i class="far fa-star"></i>
+                        </span>
+                      </template>
+                    </a>
+                  </div>
+                </div>
+
+                <textarea v-model="selectedNote.content"></textarea>
+
+                <div class="field is-grouped is-grouped-multiline set-to-bottom is-text-centered">
+                  <div class="control">
+                    <div class="tags has-addons">
+                      <span class="tag">Created:</span>
+                      <span class="tag is-primary">{{ selectedNote.created | date }}</span>
+                    </div>
+                  </div>
+
+                  <div class="control">
+                    <div class="tags has-addons">
+                      <span class="tag">Lines:</span>
+                      <span class="tag is-info">{{ linesCount }}</span>
+                    </div>
+                  </div>
+
+                  <div class="control">
+                    <div class="tags has-addons">
+                      <span class="tag">Words:</span>
+                      <span class="tag is-info">{{ wordsCount }}</span>
+                    </div>
+                  </div>
+
+                  <div class="control">
+                    <div class="tags has-addons">
+                      <span class="tag">Characters:</span>
+                      <span class="tag is-info">{{ charactersCount }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="column">
+                <div class="toolbar">
+                  <h2>Markdown Preview:</h2>
+                </div>
+                <div v-html="notePreview" class="full-width-height">
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </aside>
 
-      <template v-if="selectedNote">
-        <section class="main">
 
-          <div class="toolbar">
-            <input v-model="selectedNote.title" placeholder="Note title" />
-            <button @click="removeNote" title="Remove Note">
-              <i class="material-icons">delete</i>
-            </button>
-            <button @click="favoriteNote" title="Favorite note">
-              <i class="material-icons">
-                {{ selectedNote.favorite ? 'star' : 'star_border' }}
-              </i>
-            </button>
-          </div>
-
-          <textarea v-model="selectedNote.content"></textarea>
-
-          <div class="toolbar status-bar">
-            <span class="date">
-              <span class="label">Created:</span>
-              <span class="value">{{ selectedNote.created | date }}</span>
-            </span>
-
-            <span class="lines">
-              <span class="label">Lines:</span>
-              <span class="value">{{ linesCount }}</span>
-            </span>
-
-            <span class="words">
-              <span class="label">Words:</span>
-              <span class="value">{{ wordsCount }}</span>
-            </span>
-
-            <span class="characters">
-              <span class="label">Characters:</span>
-              <span class="value">{{ charactersCount }}</span>
-            </span>
-          </div>
-
-        </section>
-
-        <aside class="preview" v-html="notePreview"></aside>
-      </template>
-
+        </template>
+      </div>
     </div>
 
     <script src="script.js"></script>

@@ -15,9 +15,6 @@ body {
 }
 
 #notebook > * {
-  float: left;
-  display: flex;
-  flex-direction: column;
   height: 100%;
 
   > * {
@@ -37,7 +34,7 @@ body {
 }
 
 .note:hover {
-  background: #ade2ca;
+  background: #24C6DC;  /* fallback for old browsers */
 }
 
 .note .icon {
@@ -56,7 +53,7 @@ textarea {
 
 button,
 .note.selected {
-  background: #40b883;
+  background: #24C6DC;  /* fallback for old browsers */
   color: white;
 }
 
@@ -69,7 +66,7 @@ button {
 }
 
 button:hover {
-  background: #63c89b;
+  background: #24C6DC;  /* fallback for old browsers */
 }
 
 input {
@@ -111,6 +108,9 @@ textarea {
   box-sizing: border-box;
   margin: 0 4px;
   font-family: monospace;
+  background: none;
+  width: 100%;
+  height: 100%;
 }
 
 textarea, .notes, .preview {
@@ -155,3 +155,26 @@ h4 {
   font-size: 1.1em;
   font-weight: normal;
 }
+
+.set-to-bottom {
+  position: fixed !important;
+  bottom: 20px !important;
+}
+
+.main-column {
+  background: #fafafa;
+}
+
+.full-width-height {
+  width: 100%;
+}
+
+.spacing {
+  margin: 10px 0 4px;
+}
+
+body.noScroll { /* ...or body.dialogShowing */
+  overflow: hidden !important;
+}
+
+html, body {margin: 0; height: 100%; overflow: hidden}
