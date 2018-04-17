@@ -18,7 +18,10 @@
         </div>
 
         <div class="notes">
-          <div class="note" v-for="note in notes" @click="selectNote(note)">
+          <div class="note"
+                v-for="note in notes"
+                @click="selectNote(note)"
+                :class="{ selected: note === selectedNote }">
             {{ note.title }}
           </div>
         </div>
