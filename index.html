@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <title>Notebook</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/marked"></script>
+
+    <div id="notebook">
+
+      <aside class="side-bar">
+        <div class="toolbar">
+          <button @click="addNote" :title="addButtonTitle">
+            <i class="material-icons">add</i> Add note
+          </button>
+        </div>
+
+        <div class="notes">
+          <div class="note" v-for="note in notes" @click="selectNote(note)">
+            {{ note.title }}
+          </div>
+        </div>
+      </aside>
+
+      <section class="main">
+        <textarea v-model="selectedNote.content"></textarea>
+      </section>
+
+      <aside class="preview" v-html="notePreview"></aside>
+
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
