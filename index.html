@@ -7,6 +7,7 @@
   <body>
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/marked"></script>
+    <script src="https://unpkg.com/moment"></script>
 
     <div id="notebook">
 
@@ -19,17 +20,54 @@
 
         <div class="notes">
           <div class="note"
-                v-for="note in notes"
+                v-for="note in sortedNotes"
                 @click="selectNote(note)"
                 :class="{ selected: note === selectedNote }">
             {{ note.title }}
+            <i class="icon material-icons" v-if="note.favorite">star</i>
           </div>
         </div>
       </aside>
 
       <template v-if="selectedNote">
         <section class="main">
+
+          <div class="toolbar">
+            <input v-model="selectedNote.title" placeholder="Note title" />
+            <button @click="removeNote" title="Remove Note">
+              <i class="material-icons">delete</i>
+            </button>
+            <button @click="favoriteNote" title="Favorite note">
+              <i class="material-icons">
+                {{ selectedNote.favorite ? 'star' : 'star_border' }}
+              </i>
+            </button>
+          </div>
+
           <textarea v-model="selectedNote.content"></textarea>
+
+          <div class="toolbar status-bar">
+            <span class="date">
+              <span class="label">Created:</span>
+              <span class="value">{{ selectedNote.created | date }}</span>
+            </span>
+
+            <span class="lines">
+              <span class="label">Lines:</span>
+              <span class="value">{{ linesCount }}</span>
+            </span>
+
+            <span class="words">
+              <span class="label">Words:</span>
+              <span class="value">{{ wordsCount }}</span>
+            </span>
+
+            <span class="characters">
+              <span class="label">Characters:</span>
+              <span class="value">{{ charactersCount }}</span>
+            </span>
+          </div>
+
         </section>
 
         <aside class="preview" v-html="notePreview"></aside>
