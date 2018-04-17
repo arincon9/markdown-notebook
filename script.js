@@ -3,7 +3,7 @@ new Vue({
 
   data() {
     return {
-      notes: [],
+      notes: JSON.parse(localStorage.getItem("notes")) || [],
       selectedId: null
     }
   },
@@ -22,10 +22,14 @@ new Vue({
     }
   },
 
+  watch: {
+    notes: {
+      handler: "saveNotes",
+      deep: true
+    }
+  },
+
   methods: {
-    reportOperation(opName) {
-      console.log("The", opName, "operation was completed!");
-    },
 
     addNote() {
       const time = Date.now();
@@ -41,6 +45,12 @@ new Vue({
 
     selectNote(note) {
       return this.selectedId = note.id
+    },
+
+    saveNotes() {
+      localStorage.setItem("notes", JSON.stringify(this.notes));
+      console.log("Notes have been saved!", new Date());
     }
+
   }
 });
