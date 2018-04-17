@@ -18,14 +18,7 @@ new Vue({
     },
 
     selectedNote() {
-      if(this.notes.length > 0 && this.selectedId) {
-        return this.findObjectByKey(this.notes, "id", this.selectedId);
-      } else if(this.notes.length > 1) {
-        return this.notes[0];
-      } else {
-        this.addNote();
-        return this.notes[0];
-      };
+      return this.notes.find(note => note.id === this.selectedId)
     }
   },
 
@@ -48,15 +41,6 @@ new Vue({
 
     selectNote(note) {
       return this.selectedId = note.id
-    },
-
-    findObjectByKey(array, key, value) {
-      for (var i = 0; i < array.length; i++) {
-          if (array[i][key] === value) {
-              return array[i];
-          }
-      }
-      return null;
     }
   }
 });
